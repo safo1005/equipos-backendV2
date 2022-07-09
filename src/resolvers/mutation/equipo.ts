@@ -1,12 +1,14 @@
 import { IResolvers } from '@graphql-tools/utils';
-import { COLLECTIONS } from '../config/constants';
+import { COLLECTIONS } from '../../config/constants';
+import { asignDocumentId, findOneElement, insertOneElement } from '../../lib/db-operations';
 
-const resolversMutation: IResolvers = {
+const resolversEquipoMutation: IResolvers = {
     Mutation: {
         async register(_, { equipo }, { db }) {
+            // Comprobar el último equipo registrado para asignar ID
+            equipo.id = await asignDocumentId(db, COLLECTIONS.EQUIPOS, { registerDate: -1 });
             // Comprobar que el equipo no existe 
-            const equipoCheck = await db.collection(COLLECTIONS.EQUIPOS).
-                    findOne({nombre: equipo.nombre});
+            const equipoCheck = await findOneElement(db, COLLECTIONS.EQUIPOS, { nombre: equipo.nombre });
 
             if (equipoCheck !== null) {
                 return {
@@ -15,22 +17,12 @@ const resolversMutation: IResolvers = {
                     equipo: null
                 };
             }
-            // Comprobar último equipo registrado para asignar ID
-            const lastEquipo = await db.collection(COLLECTIONS.EQUIPOS).
-                                    find().
-                                    limit(1).
-                                    sort({registerDate: -1}).toArray();
-            if (lastEquipo.length === 0 ) {
-                equipo.id = 1;
-            } else {
-                equipo.id = lastEquipo[0].id + 1;
-            }
+
             // Asignar la fecha en formato ISO en la propiedad registerDate
             equipo.registerDate = new Date().toISOString();
             // Guardar el registro en la colección
-            return await db.
-                collection(COLLECTIONS.EQUIPOS).
-                insertOne(equipo).then(
+            return await insertOneElement(db, COLLECTIONS.EQUIPOS, equipo)
+                .then(
                     async () => {
                         return {
                             status: true,
@@ -50,4 +42,4 @@ const resolversMutation: IResolvers = {
     }
 };
 
-export default resolversMutation;
+export default resolversEquipoMutation;

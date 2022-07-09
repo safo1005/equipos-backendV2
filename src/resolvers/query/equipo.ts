@@ -1,14 +1,15 @@
 import { IResolvers } from '@graphql-tools/utils';
-import { COLLECTIONS } from '../config/constants';
+import { COLLECTIONS } from '../../config/constants';
+import { findElements } from '../../lib/db-operations';
 
-const resolversQuery: IResolvers = {
+const resolversEquipoQuery: IResolvers = {
     Query: {
         async equipos(_, __, { db }) {
             try {
                 return {
                     status: true,
                     message: 'Lista de Equipos cargada correctamente',
-                    equipos: await db.collection(COLLECTIONS.EQUIPOS).find().toArray()
+                    equipos: await findElements(db, COLLECTIONS.EQUIPOS, {}),
                 };
             } catch (error) {
                 console.log(error);
@@ -22,4 +23,4 @@ const resolversQuery: IResolvers = {
     }
 };
 
-export default resolversQuery;
+export default resolversEquipoQuery;

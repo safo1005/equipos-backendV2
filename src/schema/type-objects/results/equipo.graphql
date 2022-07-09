@@ -1,0 +1,5 @@
+type ResultEquipo implements Result {
+    status: Boolean!
+    message: String!
+    equipo: Equipo
+}
