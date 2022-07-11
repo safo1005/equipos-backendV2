@@ -1,5 +1,4 @@
 "Definición de los tipos de raíz"
 type Query {
-    "Lista de equipos registrados en la base de datos"
-    equipos: ResultEquipos
+    equipos(page: Int = 1, itemsPage: Int = 20): ResultEquipos
 }

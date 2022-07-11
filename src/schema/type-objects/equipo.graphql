@@ -1,7 +1,7 @@
 "Información detallada de los equipos"
 type Equipo {
     id: ID!
-    nombre: String!
+    nombre: String
     valorMaximo: String
     valorActual: String
     fechaActualizacion: String

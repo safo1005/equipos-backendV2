@@ -1,7 +1,7 @@
 "Input para añadir los datos de los equipos en el registro"
 input EquipoInput {
     id: ID
-    nombre: String!
+    nombre: String
     valorMaximo: String
     valorActual: String
     fechaActualizacion: String
