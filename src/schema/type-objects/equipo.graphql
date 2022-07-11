@@ -5,5 +5,5 @@ type Equipo {
     valorMaximo: String
     valorActual: String
     fechaActualizacion: String
-    registerDate: String!
+    registerDate: String
 }
